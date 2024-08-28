@@ -1,0 +1,56 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'index' %}" class="text-white text-xl">Home</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-semibold mb-4">Logout</h1>
+        <p class="bg-white p-6 rounded-lg shadow-md">You have been logged out. <a href="{% url 'login' %}" class="text-blue-500">Login again</a></p>
+    </div>
+
+</body>
+</html>
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'index' %}" class="text-white text-xl">Home</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-semibold mb-4">Logout</h1>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <p>You have been logged out.</p>
+            <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Login again</a>
+        </div>
+    </div>
+
+</body>
+
+</html>
+

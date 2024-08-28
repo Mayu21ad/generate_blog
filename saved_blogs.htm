@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Blogs</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-semibold mb-6">Saved Blogs</h1>
+        <ul class="space-y-4">
+            {% for blog in blogs %}
+            <li class="bg-white p-4 rounded shadow-md">
+                <p class="text-sm text-gray-500 mb-2">{{ blog.created_at }}</p>
+                <p>{{ blog.content }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+
+</html>

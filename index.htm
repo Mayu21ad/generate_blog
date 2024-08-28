@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog from Video</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        .load {
+            width: 100px;
+            height: 100px;
+            margin: 110px auto 0;
+            border: solid 10px #8822aa;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            -webkit-transition: all 0.5s ease-in;
+            -webkit-animation-name: rotate;
+            -webkit-animation-duration: 1.0s;
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-timing-function: linear;
+            transition: all 0.5s ease-in;
+            animation-name: rotate;
+            animation-duration: 1.0s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-100 font sans antialiased">
+    <nav class="bg-purple-600 p-4 text-white flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-semibold">Blog Generator</h1>
+        </div>
+        <div class="flex-1 text-center">
+            <a href="#" class="text-white mx-4">Welcome User !</a>
+        </div>
+        <div class="flex space-x-4">
+            <a href="/saved-blogs"
+                class="px-4 py-2 text-white rounded-lg hover:bg-purple-700 focus:bg-purple-300 focus:outline-none focus:ring-purple-500 font-semibold">Saved
+                Blogs</a>
+            <a href="/logout"class="px-4 py-2 text-white rounded-lg hover:bg-purple-700 focus:bg-purple-300 focus:outline-none focus:ring-purple-500 font-semibold">Logout</a>
+        </div>
+    </nav>
+
+    <br>
+    <br>
+
+    <div class="flex-grow container mx-auto mt-10 px-4 sm:px-0">
+        <div
+            class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105 flex flex-col">
+            <div class="text-center">
+                <h2 class="text-2xl font-semibold mb-4">Hello User !</h2>
+                <p class="text-gray-700">
+                    This application generates blogs from videos you upload.
+                </p>
+            </div>
+            <br>
+
+            <div>
+                <h2 class="text-xl mb-4 font-semibold">Upload a Video</h2>
+                <form id="videoUploadForm" enctype="multipart/form-data">
+                    <input type="file" id="videoFile" name="video_file" accept="video/*" class="flex-grow p-2 border border-purple-400 rounded-md">
+                    <button type="submit" id="uploadButton"
+                        class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4">Upload</button>
+                </form>
+            </div>
+
+            <div style="display: none;" id="loading-circle" class="load"></div>
+
+            <section class="mt-10 flex-grow">
+                <h2 class="text-xl mb-4 font-semibold">Generated Blog Article</h2>
+                <div id="blogContent" class="mt-2 text-gray-700 space-y-4"></div>
+                <button id="saveBlogButton"
+                    class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4">Save Blog</button>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('videoUploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const videoFile = document.getElementById('videoFile').files[0];
+            formData.append('video_file', videoFile);
+
+            document.getElementById('blogContent').innerHTML = 'Uploading and processing...';
+            document.getElementById('loading-circle').style.display = 'block';
+
+            try {
+                const response = await fetch('/generate-blog-from-video/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.content) {
+                    document.getElementById('blogContent').innerHTML = data.content;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again later.');
+            }
+
+            document.getElementById('loading-circle').style.display = 'none';
+        });
+
+        document.getElementById('saveBlogButton').addEventListener('click', async () => {
+            const blogContent = document.getElementById('blogContent').innerText;
+
+            if (blogContent) {
+                try {
+                    const response = await fetch('/save-blog/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ content: blogContent })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Blog saved successfully!');
+                    } else {
+                        alert('Error saving blog: ' + data.error);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again later.');
+                }
+            } else {
+                alert('No blog content to save.');
+            }
+        });
+    </script>
+</body>
+
+</html>
